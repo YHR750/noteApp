@@ -48,10 +48,20 @@ const NoteScreen = () => {
         console.log(items)
     },[]);
     
+    const deleteNote = async(id) => {
+        try{
+            const response = await fetch (`http://127.0.0.1:3000/deleteData/$id`);
+            const data = await response.json();
+            setItems(data.values);
+        }catch(err){
+            setError(err.message);
+        }
+    };
+
     return(
         //mengatur yg dilihat
         <View style={styles.container}>
-            <NoteList notes={items}/>
+            <NoteList notes={items} onDelete = {deleteNote}/>
             <TouchableOpacity 
                 style={styles.addButton}
                 onPress={() => setModalVisible(true)}

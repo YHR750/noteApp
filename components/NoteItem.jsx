@@ -10,7 +10,7 @@ const NoteItem = ({note}) => {
           <TouchableOpacity>
             <Text style={styles.edit}>✏️</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => onDelete(note.$id)}>
             <Text style={styles.delete}>❌</Text>
           </TouchableOpacity>
         </View>
