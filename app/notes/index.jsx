@@ -50,11 +50,19 @@ const NoteScreen = () => {
     
     const deleteNote = async(id) => {
         try{
-            const response = await fetch (`http://127.0.0.1:3000/deleteData/$id`);
+            console.log("id"+id);
+            const response = await fetch (`http://127.0.0.1:3000/deleteData/${id}`,{
+                method : 'DELETE',
+
+            });
+            if (!response.ok) {
+                throw new Error(`Server error : ${response.status}`);
+            }
             const data = await response.json();
-            setItems(data.values);
+            setItems((prevItems) => prevItems.filter((items) => items.id !== id));
         }catch(err){
             setError(err.message);
+            console.error("Delete failed:", err)
         }
     };
 
