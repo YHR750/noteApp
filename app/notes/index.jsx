@@ -14,6 +14,7 @@ const NoteScreen = () => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [newNote, setNewNote] = useState('');
+    const [onEdit, setOnEdit] = useState('');
     const addNote = async () => {
         //if (newNote.trim()==='')return;
         //setNotes((prevNote) => [
@@ -64,12 +65,34 @@ const NoteScreen = () => {
             setError(err.message);
             console.error("Delete failed:", err)
         }
+
     };
+    const updateData = async(id) => {
+        const today = new Date().toISOString().split("T")[0];
+        //console.log(onEdit);
+        try{
+            const response = await fetch (`http://127.0.0.1:3000/changeData`,{
+                method : 'PUT',
+                headers: {'contentType' : 'application/x-www-form-urlencoded'},
+                body: JSON.stringify({id,today}),
+            });
+            if (!response.ok) {
+                throw new Error(`Server error : ${response.status}`);
+            }
+            const data = await response.json();
+            setItems((prevItems) => prevItems.filter((items) => items.id !== id));
+
+        }catch(err){
+            setError(err.message);
+            console.error("Update failed", err)
+        }
+    };
+    
 
     return(
         //mengatur yg dilihat
         <View style={styles.container}>
-            <NoteList notes={items} onDelete = {deleteNote}/>
+            <NoteList notes={items} onDelete = {deleteNote} onEdit = {onEdit}/>
             <TouchableOpacity 
                 style={styles.addButton}
                 onPress={() => setModalVisible(true)}
