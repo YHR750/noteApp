@@ -14,7 +14,6 @@ const NoteScreen = () => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [newNote, setNewNote] = useState('');
-    const [onEdit, setOnEdit] = useState('');
     const addNote = async () => {
         //if (newNote.trim()==='')return;
         //setNotes((prevNote) => [
@@ -67,20 +66,21 @@ const NoteScreen = () => {
         }
 
     };
-    const updateData = async(id) => {
-        const today = new Date().toISOString().split("T")[0];
+    const updateData = async(id,text) => {
+        const lastEdit = new Date().toISOString().split("T")[0];
+        console.log(lastEdit)
         //console.log(onEdit);
         try{
             const response = await fetch (`http://127.0.0.1:3000/changeData`,{
                 method : 'PUT',
-                headers: {'contentType' : 'application/x-www-form-urlencoded'},
-                body: JSON.stringify({id,today}),
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({text,lastEdit,id}),
             });
             if (!response.ok) {
                 throw new Error(`Server error : ${response.status}`);
             }
             const data = await response.json();
-            setItems((prevItems) => prevItems.filter((items) => items.id !== id));
+            setItems((prevItems) => prevItems.map((item) => item.id === id ? {...item, text: text} : item));
 
         }catch(err){
             setError(err.message);
@@ -92,7 +92,7 @@ const NoteScreen = () => {
     return(
         //mengatur yg dilihat
         <View style={styles.container}>
-            <NoteList notes={items} onDelete = {deleteNote} onEdit = {onEdit}/>
+            <NoteList notes={items} onDelete = {deleteNote} onEdit = {updateData}/>
             <TouchableOpacity 
                 style={styles.addButton}
                 onPress={() => setModalVisible(true)}
