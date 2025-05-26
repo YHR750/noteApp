@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, Modal, TextInput } from 'react-native'
 
 const AddNoteModal = (
     {

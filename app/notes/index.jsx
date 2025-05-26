@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Modal, TextInput } from "react-native";
 import { useState, useEffect } from "react";
 import NoteList from "@/components/NoteList";
+import AddNoteModal from "../../components/AddNoteModal";
 
 const NoteScreen = () => {
     const [notes, setNotes] = useState([
@@ -11,6 +12,7 @@ const NoteScreen = () => {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [pressCount, setPressCount] = useState(0);
 
     const [modalVisible, setModalVisible] = useState(false);
     const [newNote, setNewNote] = useState('');
@@ -21,12 +23,17 @@ const NoteScreen = () => {
             //{id:Date.now.toString(),text:newNote},
         //]);
         const today = new Date().toISOString().split("T")[0];
+        console.log(newNote);
+        let text = newNote;
+        let lastEdit = today;
         try{
             const response = await fetch (`http://127.0.0.1:3000/addNote`,{
                 method: 'POST', 
                 headers: {'Content-Type':'application/json'},
-                body: JSON.stringify({newNote,today}),
+                body: JSON.stringify({text,lastEdit}),
             });
+            //setItems([...items, response.]);
+            setPressCount(prev => prev + 1);
         }catch(error){
             console.log(error)
         }
@@ -46,7 +53,7 @@ const NoteScreen = () => {
         };
         fetchNote();
         console.log(items)
-    },[]);
+    },[pressCount ]);
     
     const deleteNote = async(id) => {
         try{
@@ -99,6 +106,15 @@ const NoteScreen = () => {
             >
                 <Text style={styles.addButtonText}>+ Add Noted</Text>
             </TouchableOpacity>
+            <AddNoteModal
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                newNote={newNote}
+                setNewNote={setNewNote}
+                addNote={addNote}
+            />
+
+    
 
         </View>
     );
