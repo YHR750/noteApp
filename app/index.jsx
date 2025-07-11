@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Button, Image, TouchableOpacity } from "react-native";
 import PostItImage from '@/assets/images/post-it.png'
 import { useRouter } from 'expo-router';
+
 const Home_Screen = () => {
   const router = useRouter();
   return (
@@ -10,7 +11,7 @@ const Home_Screen = () => {
       <Text style={styles.subtitle}>Capture your thoguhts anythime, anywhere</Text>
       <TouchableOpacity
         style = {styles.button}
-        onPress={() => router.push('./notes')}
+        onPress={() => router.navigate('/auths')}
       >
         <Text style={styles.buttonText}>Get started</Text>
       </TouchableOpacity>
