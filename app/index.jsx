@@ -11,7 +11,7 @@ const Home_Screen = () => {
       <Text style={styles.subtitle}>Capture your thoguhts anythime, anywhere</Text>
       <TouchableOpacity
         style = {styles.button}
-        onPress={() => router.navigate('/auths')}
+        onPress={() => router.push('/auths')}
       >
         <Text style={styles.buttonText}>Get started</Text>
       </TouchableOpacity>
